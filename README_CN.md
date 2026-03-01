@@ -32,7 +32,7 @@
 <td><img src="https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png" width="16" height="16" alt="Google"> <a href="https://labs.google/fx/tools/flow">Google Flow</a></td>
 <td>
 
-**图片生成**: 最多4张 (Imagen 4, Nano Banana)<br>
+**图片生成**: 最多4张 (Nano Banana 2, Imagen 4)<br>
 **视频生成**: Veo 3.1 / Veo 2
 
 </td>

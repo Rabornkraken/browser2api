@@ -32,7 +32,7 @@ Automates web UIs via Playwright + Chrome CDP — no API keys or reverse enginee
 <td><img src="https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png" width="16" height="16" alt="Google"> <a href="https://labs.google/fx/tools/flow">Google Flow</a></td>
 <td>
 
-**Image**: up to 4 images (Imagen 4, Nano Banana)<br>
+**Image**: up to 4 images (Nano Banana 2, Imagen 4)<br>
 **Video**: Veo 3.1 / Veo 2
 
 </td>
