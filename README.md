@@ -55,7 +55,7 @@ Requires Python 3.11+ and Google Chrome installed locally.
 ### Jimeng — Image Generation
 
 ```bash
-python examples/generate.py "一只穿着宇航服的猫咪站在月球表面"
+python examples/generate.py "A cat in an astronaut suit standing on the moon"
 python examples/generate.py "prompt" --model jimeng-5.0 --ratio 1:1 --resolution "超清 4K"
 ```
 
@@ -64,8 +64,8 @@ Models: `jimeng-3.0` `jimeng-3.1` `jimeng-4.0` `jimeng-4.1` `jimeng-4.5` `jimeng
 ### Jimeng — Video Generation
 
 ```bash
-python examples/generate_video.py "一只猫在花园里散步"
-python examples/generate_video.py "城市夜景" --ratio 16:9 --duration 10s --model video-3.0-fast
+python examples/generate_video.py "A cat walking through a garden"
+python examples/generate_video.py "City night skyline" --ratio 16:9 --duration 10s --model video-3.0-fast
 ```
 
 Models: `seedance-2.0-fast` `seedance-2.0` `video-3.5-pro` `video-3.0-pro` `video-3.0-fast` `video-3.0`

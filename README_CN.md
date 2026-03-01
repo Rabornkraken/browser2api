@@ -73,8 +73,8 @@ python examples/generate_video.py "城市夜景" --ratio 16:9 --duration 10s --m
 ### Google Flow — 图片生成
 
 ```bash
-python examples/generate_flow.py "A sunset over mountains, digital art"
-python examples/generate_flow.py "prompt" --model imagen-4 --orientation portrait --count 4
+python examples/generate_flow.py "山脉上的日落，数字艺术风格"
+python examples/generate_flow.py "提示词" --model imagen-4 --orientation portrait --count 4
 ```
 
 可用模型: `nano-banana-pro` `nano-banana-2` `imagen-4`
@@ -82,8 +82,8 @@ python examples/generate_flow.py "prompt" --model imagen-4 --orientation portrai
 ### Google Flow — 视频生成
 
 ```bash
-python examples/generate_flow_video.py "A cat walking through a garden"
-python examples/generate_flow_video.py "prompt" --model veo-3.1-quality --orientation portrait --count 1
+python examples/generate_flow_video.py "一只猫在花园里散步"
+python examples/generate_flow_video.py "提示词" --model veo-3.1-quality --orientation portrait --count 1
 ```
 
 可用模型: `veo-3.1-fast` `veo-3.1-quality` `veo-2-fast` `veo-2-quality`
