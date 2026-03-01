@@ -23,8 +23,8 @@
 <td><img src="https://www.google.com/s2/favicons?domain=jimeng.jianying.com&sz=32" width="16" height="16" alt="即梦"> <a href="https://jimeng.jianying.com">即梦AI</a></td>
 <td>
 
-**图片生成**: 最多4张，支持2K/4K分辨率<br>
-**视频生成**: 5秒/10秒，最高1080p
+**图片生成**: Seedream 5.0 — 最多4张，2K/4K<br>
+**视频生成**: Seedance 2.0 — 5秒/10秒，最高1080p
 
 </td>
 </tr>
@@ -32,8 +32,8 @@
 <td><img src="https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png" width="16" height="16" alt="Google"> <a href="https://labs.google/fx/tools/flow">Google Flow</a></td>
 <td>
 
-**图片生成**: 最多4张 (Nano Banana 2, Imagen 4)<br>
-**视频生成**: Veo 3.1 / Veo 2
+**图片生成**: Imagen 4, Nano Banana 2 — 最多4张<br>
+**视频生成**: Veo 3.1 — Fast / Quality
 
 </td>
 </tr>

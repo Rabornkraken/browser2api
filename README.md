@@ -23,8 +23,8 @@ Automates web UIs via Playwright + Chrome CDP — no API keys or reverse enginee
 <td><img src="https://www.google.com/s2/favicons?domain=jimeng.jianying.com&sz=32" width="16" height="16" alt="Jimeng"> <a href="https://jimeng.jianying.com">Jimeng (即梦AI)</a></td>
 <td>
 
-**Image**: up to 4 images, 2K/4K resolution<br>
-**Video**: 5s/10s, up to 1080p
+**Image**: Seedream 5.0 — up to 4 images, 2K/4K<br>
+**Video**: Seedance 2.0 — 5s/10s, up to 1080p
 
 </td>
 </tr>
@@ -32,8 +32,8 @@ Automates web UIs via Playwright + Chrome CDP — no API keys or reverse enginee
 <td><img src="https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png" width="16" height="16" alt="Google"> <a href="https://labs.google/fx/tools/flow">Google Flow</a></td>
 <td>
 
-**Image**: up to 4 images (Nano Banana 2, Imagen 4)<br>
-**Video**: Veo 3.1 / Veo 2
+**Image**: Imagen 4, Nano Banana 2 — up to 4 images<br>
+**Video**: Veo 3.1 — Fast / Quality
 
 </td>
 </tr>
