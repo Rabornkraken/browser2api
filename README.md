@@ -20,7 +20,7 @@ Automates web UIs via Playwright + Chrome CDP — no API keys or reverse enginee
 
 <table>
 <tr>
-<td><img src="https://jimeng.jianying.com/favicon.ico" width="16" height="16" alt="Jimeng"> <a href="https://jimeng.jianying.com">Jimeng (即梦AI)</a></td>
+<td><img src="https://www.google.com/s2/favicons?domain=jimeng.jianying.com&sz=32" width="16" height="16" alt="Jimeng"> <a href="https://jimeng.jianying.com">Jimeng (即梦AI)</a></td>
 <td>
 
 **Image**: up to 4 images, 2K/4K resolution<br>

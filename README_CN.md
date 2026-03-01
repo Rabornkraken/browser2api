@@ -20,7 +20,7 @@
 
 <table>
 <tr>
-<td><img src="https://jimeng.jianying.com/favicon.ico" width="16" height="16" alt="即梦"> <a href="https://jimeng.jianying.com">即梦AI</a></td>
+<td><img src="https://www.google.com/s2/favicons?domain=jimeng.jianying.com&sz=32" width="16" height="16" alt="即梦"> <a href="https://jimeng.jianying.com">即梦AI</a></td>
 <td>
 
 **图片生成**: 最多4张，支持2K/4K分辨率<br>
