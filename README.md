@@ -1,15 +1,43 @@
+<div align="center">
+
 # browser2api
 
-Turn browser UIs into programmatic image and video generation APIs via Playwright and Chrome DevTools Protocol (CDP).
+Turn browser UIs into programmatic image and video generation APIs.
 
-Instead of reverse-engineering internal APIs (auth tokens, signatures, anti-bot params), browser2api automates the actual web UI — filling prompts, clicking buttons, and intercepting generated content.
+Automates web UIs via Playwright + Chrome CDP — no API keys or reverse engineering needed.
+
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![Playwright](https://img.shields.io/badge/Playwright-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev)
+[![Chrome CDP](https://img.shields.io/badge/Chrome_CDP-4285F4?logo=googlechrome&logoColor=white)](https://chromedevtools.github.io/devtools-protocol/)
+
+**[English](README.md)** | **[中文](README_CN.md)**
+
+</div>
+
+---
 
 ## Supported Platforms
 
-| Platform | Image | Video | Status |
-|----------|-------|-------|--------|
-| [Jimeng (即梦AI)](https://jimeng.jianying.com) | 4 images, up to 4K | 5s/10s, up to 1080p | Fully implemented |
-| [Google Flow](https://labs.google/fx/tools/flow) | 4 images | Veo 3.1 / Veo 2 | Fully implemented |
+<table>
+<tr>
+<td><img src="https://jimeng.jianying.com/favicon.ico" width="16" height="16" alt="Jimeng"> <a href="https://jimeng.jianying.com">Jimeng (即梦AI)</a></td>
+<td>
+
+**Image**: up to 4 images, 2K/4K resolution<br>
+**Video**: 5s/10s, up to 1080p
+
+</td>
+</tr>
+<tr>
+<td><img src="https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png" width="16" height="16" alt="Google"> <a href="https://labs.google/fx/tools/flow">Google Flow</a></td>
+<td>
+
+**Image**: up to 4 images (Imagen 4, Nano Banana)<br>
+**Video**: Veo 3.1 / Veo 2
+
+</td>
+</tr>
+</table>
 
 ## Setup
 
@@ -31,7 +59,7 @@ python examples/generate.py "一只穿着宇航服的猫咪站在月球表面"
 python examples/generate.py "prompt" --model jimeng-5.0 --ratio 1:1 --resolution "超清 4K"
 ```
 
-Available models: `jimeng-3.0`, `jimeng-3.1`, `jimeng-4.0`, `jimeng-4.1`, `jimeng-4.5`, `jimeng-4.6`, `jimeng-5.0`
+Models: `jimeng-3.0` `jimeng-3.1` `jimeng-4.0` `jimeng-4.1` `jimeng-4.5` `jimeng-4.6` `jimeng-5.0`
 
 ### Jimeng — Video Generation
 
@@ -40,14 +68,16 @@ python examples/generate_video.py "一只猫在花园里散步"
 python examples/generate_video.py "城市夜景" --ratio 16:9 --duration 10s --model video-3.0-fast
 ```
 
-Available models: `seedance-2.0-fast`, `seedance-2.0`, `video-3.5-pro`, `video-3.0-pro`, `video-3.0-fast`, `video-3.0`
+Models: `seedance-2.0-fast` `seedance-2.0` `video-3.5-pro` `video-3.0-pro` `video-3.0-fast` `video-3.0`
 
 ### Google Flow — Image Generation
 
 ```bash
 python examples/generate_flow.py "A sunset over mountains, digital art"
-python examples/generate_flow.py "prompt" --model nano-banana-2
+python examples/generate_flow.py "prompt" --model imagen-4 --orientation portrait --count 4
 ```
+
+Models: `nano-banana-pro` `nano-banana-2` `imagen-4`
 
 ### Google Flow — Video Generation
 
@@ -56,30 +86,15 @@ python examples/generate_flow_video.py "A cat walking through a garden"
 python examples/generate_flow_video.py "prompt" --model veo-3.1-quality --orientation portrait --count 1
 ```
 
-Available models: `veo-3.1-fast`, `veo-3.1-quality`, `veo-2-fast`, `veo-2-quality`
-
-## Notes
-
-### Jimeng (即梦AI)
-
-- **Member subscription recommended** — A paid membership is required for video generation and provides higher daily quotas for image generation. Free accounts have limited credits and some models/features may not be available.
-- **Login** — On first run, a headed Chrome window opens for you to log in manually. The session is saved and reused for subsequent runs. If the session expires, you'll be prompted to log in again automatically.
-- **4K resolution** — Requires a member subscription. Free accounts are limited to 2K.
-- **Video generation** takes 30-120 seconds depending on the model and duration. The `seedance-2.0` and `video-3.5-pro` models produce higher quality but take longer and cost more credits.
-
-### Google Flow
-
-- **Google account required** — You must be logged into a Google account in the headed browser before generation works.
-- **Regional availability** — Google Flow may not be available in all regions. A VPN may be needed.
-- **Video generation** takes 60-120+ seconds depending on the model. `veo-3.1-quality` produces higher quality but takes longer.
+Models: `veo-3.1-fast` `veo-3.1-quality` `veo-2-fast` `veo-2-quality`
 
 ## How It Works
 
-1. **Launch** — Opens a real Chrome browser via CDP (not Playwright's Chromium) for anti-detection
-2. **Login** — Checks for a valid session. If not logged in, prompts you to log in manually in the browser window. Session persists in `~/.browser2api/browser_data/` and is reused for subsequent runs
-3. **Generate** — Navigates to the generation page, selects model/settings via UI automation, fills the prompt, clicks submit
-4. **Capture** — Intercepts network responses and polls the DOM for generated content (images or video)
-5. **Download** — Downloads high-resolution results locally
+1. **Launch** — Opens a real Chrome browser via CDP (not Playwright's bundled Chromium) for anti-detection
+2. **Login** — Checks for a valid session. If not logged in, opens a headed browser for manual login. Session persists in `~/.browser2api/browser_data/`
+3. **Generate** — Navigates to the generation page, configures model/settings via UI automation, fills the prompt, clicks submit
+4. **Capture** — Intercepts network responses and polls the DOM for generated content
+5. **Download** — Downloads results locally
 
 ## Programmatic Usage
 
@@ -110,28 +125,6 @@ asyncio.run(main())
 ```
 
 ```python
-from browser2api.platforms.jimeng import (
-    JimengVideoClient, JimengVideoModel, JimengVideoDuration
-)
-
-async def generate_video():
-    bm = BrowserManager()
-    context, page = await bm.launch_for_login(Platform.JIMENG)
-
-    client = JimengVideoClient(
-        page, context,
-        output_dir="./output",
-        model=JimengVideoModel.VIDEO_3_0_FAST,
-        duration=JimengVideoDuration.FIVE,
-    )
-
-    result = await client.generate_video("一只猫在花园里散步", timeout_seconds=300)
-    print(f"Video: {result.video.local_path} ({result.video.size_bytes:,} bytes)")
-
-    await bm.close()
-```
-
-```python
 from browser2api.platforms.flow import FlowVideoClient, FlowVideoModel, FlowOrientation
 
 async def generate_flow_video():
@@ -151,38 +144,46 @@ async def generate_flow_video():
     await bm.close()
 ```
 
+## Notes
+
+### Jimeng (即梦AI)
+
+- **Member subscription recommended** — Required for video generation and higher daily image quotas.
+- **Login** — First run opens a headed Chrome window for manual login. Session is saved and reused.
+- **4K resolution** — Requires membership. Free accounts are limited to 2K.
+- **Video generation** — 30-120s depending on model/duration.
+
+### Google Flow
+
+- **Google account required** — Must be logged in via the headed browser.
+- **Regional availability** — May require a VPN in some regions.
+- **Video generation** — 60-120+s depending on model.
+
 ## Project Structure
 
 ```
 src/browser2api/
 ├── config.py              # Shared constants (DATA_DIR)
 ├── types.py               # Platform, GenerationStatus, GeneratedImage, GeneratedVideo, etc.
-├── base.py                # Abstract base classes (AbstractImageClient, AbstractLoginHandler)
+├── base.py                # Abstract base classes
 ├── browser.py             # BrowserManager, ChromeLauncher, CDP connection
 └── platforms/
     ├── jimeng/
-    │   ├── client.py      # JimengBaseClient, JimengClient (images), JimengVideoClient (video)
+    │   ├── client.py      # JimengBaseClient, JimengClient, JimengVideoClient
     │   ├── enums.py       # Models, ratios, resolutions, durations
     │   ├── selectors.py   # CSS selectors and URL constants
     │   └── login.py       # Cookie-based login handler
     └── flow/
-        ├── client.py      # FlowBaseClient, FlowClient (images), FlowVideoClient (video)
+        ├── client.py      # FlowBaseClient, FlowClient, FlowVideoClient
         ├── enums.py       # Models, orientations, video models
         ├── selectors.py   # CSS selectors and URL constants
         └── login.py       # Login handler
 ```
-
-## Adding a New Platform
-
-1. Create `src/browser2api/platforms/<name>/` with `__init__.py`, `client.py`, `enums.py`, `login.py`
-2. Add platform to `Platform` enum in `types.py`
-3. Implement client inheriting from `JimengBaseClient` or `AbstractImageClient`
-4. Use `BrowserManager.launch_for_login()` for browser lifecycle
 
 ## Disclaimer
 
 This project automates browser interactions with third-party platforms. Use at your own risk.
 
 - **Rate limits** — Avoid aggressive usage. Respect platform rate limits and credit quotas.
-- **Session data** — Browser session data (cookies, local storage) is stored locally in `~/.browser2api/`. Keep this directory secure as it contains your login sessions.
-- **For personal/research use only** — This tool is intended for personal experimentation and research. Do not use it for commercial purposes or at scale without explicit permission from the respective platforms.
+- **Session data** — Stored locally in `~/.browser2api/`. Keep this directory secure.
+- **For personal/research use only** — Do not use for commercial purposes or at scale without permission from the respective platforms.
