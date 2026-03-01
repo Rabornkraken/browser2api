@@ -74,7 +74,7 @@ Models: `seedance-2.0-fast` `seedance-2.0` `video-3.5-pro` `video-3.0-pro` `vide
 
 ```bash
 python examples/generate_flow.py "A sunset over mountains, digital art"
-python examples/generate_flow.py "prompt" --model imagen-4 --orientation portrait --count 4
+python examples/generate_flow.py "prompt" --model nano-banana-2 --orientation portrait --count 4
 ```
 
 Models: `nano-banana-pro` `nano-banana-2` `imagen-4`
