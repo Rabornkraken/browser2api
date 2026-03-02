@@ -177,8 +177,9 @@ class FlowBaseClient:
         else:
             logger.warning("[Flow] Could not find any project or 'New project' button")
 
-        # Wait for the prompt bar to appear (contenteditable div or config button)
-        for _ in range(20):
+        # Wait for the prompt bar to appear (contenteditable div or config button).
+        # New projects can take 30s+ to fully load the editor UI.
+        for i in range(40):
             ready = await self.page.evaluate("""() => {
                 const ce = document.querySelector('[contenteditable="true"]');
                 const btn = document.querySelector('button[aria-haspopup="menu"]');
@@ -191,9 +192,11 @@ class FlowBaseClient:
             }""")
             if ready:
                 break
+            if i == 20:
+                logger.info("[Flow] Still waiting for prompt bar... (%ds)", i)
             await asyncio.sleep(1)
         else:
-            logger.warning("[Flow] Prompt bar did not appear within 20s")
+            logger.warning("[Flow] Prompt bar did not appear within 40s")
 
     async def _open_config_panel(self) -> bool:
         """Click the main config button in the prompt bar to open the panel.
@@ -504,7 +507,11 @@ class FlowClient(FlowBaseClient, AbstractImageClient):
         if self._config_applied:
             return
 
-        await self._open_config_panel()
+        panel_opened = await self._open_config_panel()
+        if not panel_opened:
+            logger.warning("[FlowClient] Config panel failed to open, will retry next call")
+            return
+
         # Ensure Image tab is selected
         result = await self._click_tab("Image")
         if result == 'clicked':
@@ -968,7 +975,10 @@ class FlowVideoClient(FlowBaseClient):
         if self._config_applied:
             return
 
-        await self._open_config_panel()
+        panel_opened = await self._open_config_panel()
+        if not panel_opened:
+            logger.warning("[FlowVideoClient] Config panel failed to open, will retry next call")
+            return
 
         # Switch to Video tab
         result = await self._click_tab("Video")
