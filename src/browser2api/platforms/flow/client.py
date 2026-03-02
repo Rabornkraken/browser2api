@@ -177,26 +177,54 @@ class FlowBaseClient:
         else:
             logger.warning("[Flow] Could not find any project or 'New project' button")
 
-        # Wait for the prompt bar to appear (contenteditable div or config button).
+        # Wait for the prompt bar to appear.
         # New projects can take 30s+ to fully load the editor UI.
+        # We check for the contenteditable div first (needed for prompt input),
+        # then separately wait for the config button.
         for i in range(40):
             ready = await self.page.evaluate("""() => {
                 const ce = document.querySelector('[contenteditable="true"]');
-                const btn = document.querySelector('button[aria-haspopup="menu"]');
-                if (ce && btn) {
-                    const r1 = ce.getBoundingClientRect();
-                    const r2 = btn.getBoundingClientRect();
-                    return r1.width > 50 && r2.width > 50;
+                if (ce) {
+                    const r = ce.getBoundingClientRect();
+                    return r.width > 50;
                 }
                 return false;
             }""")
             if ready:
+                logger.info("[Flow] Prompt input ready after %ds", i)
                 break
             if i == 20:
                 logger.info("[Flow] Still waiting for prompt bar... (%ds)", i)
             await asyncio.sleep(1)
         else:
-            logger.warning("[Flow] Prompt bar did not appear within 40s")
+            logger.warning("[Flow] Prompt input did not appear within 40s")
+            return
+
+        # Now wait a bit more for the config button (may lag behind).
+        # The config button is a haspopup="menu" button in the bottom prompt bar
+        # with text like "Videocrop_16_9x1" or "Imagen 4crop_16_9x2".
+        for i in range(15):
+            has_config = await self.page.evaluate("""() => {
+                const viewH = window.innerHeight;
+                for (const b of document.querySelectorAll('button[aria-haspopup="menu"]')) {
+                    const rect = b.getBoundingClientRect();
+                    if (rect.y > viewH * 0.7 && rect.width > 30 && rect.height > 20) {
+                        const text = (b.textContent || '').trim();
+                        if (text.includes('crop_') || text.includes('Image')
+                            || text.includes('Video') || text.includes('Banana')
+                            || text.includes('Imagen') || text.includes('Veo')) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }""")
+            if has_config:
+                logger.info("[Flow] Config button ready")
+                break
+            await asyncio.sleep(1)
+        else:
+            logger.warning("[Flow] Config button did not appear within 15s")
 
     async def _open_config_panel(self) -> bool:
         """Click the main config button in the prompt bar to open the panel.
@@ -205,12 +233,14 @@ class FlowBaseClient:
         a model name (Banana/Imagen/Veo) in the bottom prompt bar.
         """
         btn = await self.page.evaluate("""() => {
+            const viewH = window.innerHeight;
             for (const b of document.querySelectorAll('button[aria-haspopup="menu"]')) {
                 const text = (b.textContent || '').trim();
                 const rect = b.getBoundingClientRect();
-                if (rect.width > 100 && rect.height > 20
-                    && (text.includes('Banana') || text.includes('Imagen')
-                        || text.includes('Veo'))) {
+                if (rect.y > viewH * 0.7 && rect.width > 30 && rect.height > 20
+                    && (text.includes('crop_') || text.includes('Image')
+                        || text.includes('Video') || text.includes('Banana')
+                        || text.includes('Imagen') || text.includes('Veo'))) {
                     return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
                 }
             }
@@ -525,9 +555,10 @@ class FlowClient(FlowBaseClient, AbstractImageClient):
 
         # Verify by reading the config button text
         btn_text = await self.page.evaluate("""() => {
+            const viewH = window.innerHeight;
             for (const btn of document.querySelectorAll('button[aria-haspopup="menu"]')) {
                 const rect = btn.getBoundingClientRect();
-                if (rect.y > window.innerHeight * 0.7 && rect.width > 100) {
+                if (rect.y > viewH * 0.7 && rect.width > 30) {
                     return (btn.textContent || '').trim();
                 }
             }
@@ -884,9 +915,20 @@ class FlowClient(FlowBaseClient, AbstractImageClient):
                 duration_ms=int((time.monotonic() - start_time) * 1000),
             )
 
+        # Deduplicate GCS URLs by image UUID (path before query string).
+        # The same image can appear with different signed URLs (different
+        # Expires/Signature) from batch responses and individual fetches.
+        seen_paths: dict[str, str] = {}
+        unique_gcs: list[str] = []
+        for url in gcs_urls:
+            path = url.split('?')[0]
+            if path not in seen_paths:
+                seen_paths[path] = url
+                unique_gcs.append(url)
+
         logger.info(
-            "[FlowClient] Got %d new image URLs, %d GCS URLs captured",
-            len(all_new), len(gcs_urls),
+            "[FlowClient] Got %d new image URLs, %d unique GCS URLs (from %d captured)",
+            len(all_new), len(unique_gcs), len(gcs_urls),
         )
 
         prompt_dir = self._make_prompt_dir(prompt)
@@ -897,9 +939,9 @@ class FlowClient(FlowBaseClient, AbstractImageClient):
             filename = None
 
             # Strategy 1: download from captured signed GCS URL
-            if i < len(gcs_urls):
+            if i < len(unique_gcs):
                 local_path, filename = await self.download_image(
-                    gcs_urls[i], output_dir=prompt_dir,
+                    unique_gcs[i], output_dir=prompt_dir,
                 )
 
             # Strategy 2: extract via canvas (fallback)
@@ -913,7 +955,7 @@ class FlowClient(FlowBaseClient, AbstractImageClient):
             if local_path:
                 w, h = self._read_image_dimensions(local_path)
             images.append(GeneratedImage(
-                url=gcs_urls[i] if i < len(gcs_urls) else dom_url,
+                url=unique_gcs[i] if i < len(unique_gcs) else dom_url,
                 local_path=str(local_path) if local_path else None,
                 filename=filename,
                 width=w,
@@ -1003,9 +1045,10 @@ class FlowVideoClient(FlowBaseClient):
 
         # Verify by reading the config button text
         btn_text = await self.page.evaluate("""() => {
+            const viewH = window.innerHeight;
             for (const btn of document.querySelectorAll('button[aria-haspopup="menu"]')) {
                 const rect = btn.getBoundingClientRect();
-                if (rect.y > window.innerHeight * 0.7 && rect.width > 100) {
+                if (rect.y > viewH * 0.7 && rect.width > 30) {
                     return (btn.textContent || '').trim();
                 }
             }
