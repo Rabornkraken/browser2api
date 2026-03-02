@@ -43,15 +43,15 @@
 
 > 即梦 — 使用 **Seedream 5.0** 生成图片 · *"一只柴犬在拉面店里吃拉面，日本动漫风格"*
 
-https://github.com/user-attachments/assets/jimeng_image_gen.mp4
+<video src="https://github.com/Rabornkraken/browser2api/raw/main/demo/jimeng_image_gen.mp4" controls width="100%"></video>
 
 > Google Flow — 使用 **Nano Banana 2** 生成图片 · *"Shiba eating ramen, anime style"*
 
-https://github.com/user-attachments/assets/flow_image_gen.mp4
+<video src="https://github.com/Rabornkraken/browser2api/raw/main/demo/flow_image_gen.mp4" controls width="100%"></video>
 
 > Google Flow — 使用 **Veo 3.1 Fast** 生成视频 · *"A cat walking through a garden"*
 
-https://github.com/user-attachments/assets/flow_video_gen.mp4
+<video src="https://github.com/Rabornkraken/browser2api/raw/main/demo/flow_video_gen.mp4" controls width="100%"></video>
 
 ## 安装
 
