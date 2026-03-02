@@ -43,15 +43,15 @@ Automates web UIs via Playwright + Chrome CDP — no API keys or reverse enginee
 
 > Jimeng — Image Generation with **Seedream 5.0** · *"A Shiba Inu eating ramen in a ramen shop, anime style"*
 
-<video src="https://github.com/Rabornkraken/browser2api/raw/main/demo/jimeng_image_gen.mp4" controls width="100%"></video>
+https://github.com/user-attachments/assets/616f7f5f-1b20-49dd-9579-4680f310a32b
 
 > Google Flow — Image Generation with **Nano Banana 2** · *"Shiba eating ramen, anime style"*
 
-<video src="https://github.com/Rabornkraken/browser2api/raw/main/demo/flow_image_gen.mp4" controls width="100%"></video>
+https://github.com/user-attachments/assets/8df63cf4-a429-48df-a26d-74be0c23b7e5
 
 > Google Flow — Video Generation with **Veo 3.1 Fast** · *"A cat walking through a garden"*
 
-<video src="https://github.com/Rabornkraken/browser2api/raw/main/demo/flow_video_gen.mp4" controls width="100%"></video>
+https://github.com/user-attachments/assets/7b69ccf4-4824-4bff-adca-11dfc12fcbbf
 
 ## Setup
 
